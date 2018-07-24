@@ -16,3 +16,4 @@ text = nltk.text.Text(words_list)
 
 # 获取该词在文本中出现的位置
 # text.common_contexts(["神"])
+
