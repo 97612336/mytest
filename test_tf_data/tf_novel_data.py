@@ -78,13 +78,20 @@ def show_table(tf, tf_vectorizer, lda):
     pyLDAvis.show(data)
 
 
+def get_article_data():
+
+
+    pass
+
+
 def main():
-    series_data = get_series_data()
-    tf, tf_tool = get_tf_object(series_data, 3)
-    lda = fit_data(tf, 3)
+    series_data = get_article_data()
+    # tf, tf_tool = get_tf_object(series_data, 3)
+    # lda = fit_data(tf, 3)
     # 显示关键词信息
-    show_topic_words(tf_tool, lda)
+    # show_topic_words(tf_tool, lda)
     # 显示表格
-    show_table(tf, tf_tool, lda)
+    # show_table(tf, tf_tool, lda)
+
 
 main()
