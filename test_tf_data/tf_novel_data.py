@@ -82,16 +82,15 @@ def show_table(tf, tf_vectorizer, lda):
 def get_article_data():
     with open('../test_nltk/a.txt', 'r') as f1:
         all_text = f1.read()
-    text_list = all_text.split('当然')
-    print(len(text_list))
+
+    text_list_str = ' '.join(jieba.cut(all_text))
+    text_list = text_list_str.split("当然")
     return pd.Series(text_list)
-    # chapter_list = get_text()
-    # book_list = get_all_book_list(chapter_list)
-    # return pd.Series(book_list)
+
 
 def main():
     series_data = get_article_data()
-    tf, tf_tool = get_tf_object(series_data, 20000)
+    tf, tf_tool = get_tf_object(series_data, 228)
     lda = fit_data(tf, 10)
     # 显示关键词信息
     show_topic_words(tf_tool, lda)
