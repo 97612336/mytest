@@ -6,6 +6,7 @@ import pyLDAvis.sklearn
 
 
 # 定义中文分词器方法
+
 def chinese_word_cut(mytext):
     return ' '.join(jieba.cut(mytext))
 
@@ -79,19 +80,23 @@ def show_table(tf, tf_vectorizer, lda):
 
 
 def get_article_data():
-
-
-    pass
-
+    with open('../test_nltk/a.txt', 'r') as f1:
+        all_text = f1.read()
+    text_list = all_text.split('当然')
+    print(len(text_list))
+    return pd.Series(text_list)
+    # chapter_list = get_text()
+    # book_list = get_all_book_list(chapter_list)
+    # return pd.Series(book_list)
 
 def main():
     series_data = get_article_data()
-    # tf, tf_tool = get_tf_object(series_data, 3)
-    # lda = fit_data(tf, 3)
+    tf, tf_tool = get_tf_object(series_data, 20000)
+    lda = fit_data(tf, 10)
     # 显示关键词信息
-    # show_topic_words(tf_tool, lda)
+    show_topic_words(tf_tool, lda)
     # 显示表格
-    # show_table(tf, tf_tool, lda)
+    show_table(tf, tf_tool, lda)
 
 
 main()
