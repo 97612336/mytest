@@ -90,8 +90,8 @@ def get_article_data():
 
 def main():
     series_data = get_article_data()
-    tf, tf_tool = get_tf_object(series_data, 228)
-    lda = fit_data(tf, 10)
+    tf, tf_tool = get_tf_object(series_data, 200)
+    lda = fit_data(tf, 5)
     # 显示关键词信息
     show_topic_words(tf_tool, lda)
     # 显示表格
