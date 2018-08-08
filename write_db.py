@@ -329,6 +329,7 @@ def read_info_write_file(specs_id):
         drive_mode = 0
     # 把数据重新组合成一个对象,返回
     tmp = {}
+    tmp['id'] = specs_id
     tmp['brands_name'] = brands_name
     tmp['price'] = price
     tmp['level'] = level
@@ -355,7 +356,9 @@ def read_info_write_file(specs_id):
 
 
 # 根据字典,执行写入文件的操作
-def write_tosql_file(one_dict):
+def write_to_sql_file(one_dict):
+
+
     pass
 
 
@@ -363,4 +366,4 @@ if __name__ == '__main__':
     specs_id_list = get_all_cheyixiao_specs_id()
     for one in specs_id_list:
         info_dict = read_info_write_file(one)
-        print(info_dict)
+        write_to_sql_file(info_dict)
