@@ -47,7 +47,7 @@ def get_all_cheyixiao_specs_id():
 
 
 # 根据车型id得到车型的配置,并写入配置到文件
-def read_info_write_file(specs_id):
+def read_info(specs_id):
     db = get_db_connection()
     cursor = db.cursor()
     sql = "select * from afsaas.specs where id = %s" % specs_id
@@ -63,11 +63,14 @@ def read_info_write_file(specs_id):
     series_sql = 'select brand_id from series where id=%s' % series_id
     cursor.execute(series_sql)
     series_res = cursor.fetchone()
-    brand_id = series_res.get("brand_id")
-    brand_sql = 'select name from brands where id=%s' % brand_id
-    cursor.execute(brand_sql)
-    brand_res = cursor.fetchone()
-    brands_name = brand_res.get("name")
+    try:
+        brand_id = series_res.get("brand_id")
+        brand_sql = 'select name from brands where id=%s' % brand_id
+        cursor.execute(brand_sql)
+        brand_res = cursor.fetchone()
+        brands_name = brand_res.get("name")
+    except:
+        brands_name = ""
     # 得到车型的价格,int实际价格
     guide_price = res.get("i2")
     if '~' in guide_price:
@@ -75,6 +78,25 @@ def read_info_write_file(specs_id):
     else:
         guide_price = Decimal(str(guide_price).replace("万", ""))
         price = int(guide_price * 10000)
+    # 得到车型的价格区间
+    if price < 80000:
+        price_grade = 1
+    elif 80000 <= price < 150000:
+        price_grade = 2
+    elif 150000 <= price < 200000:
+        price_grade = 3
+    elif 200000 <= price < 300000:
+        price_grade = 4
+    elif 300000 <= price < 500000:
+        price_grade = 5
+    elif 500000 <= price < 700000:
+        price_grade = 6
+    elif 700000 <= price <= 1000000:
+        price_grade = 7
+    elif 1000000 < price:
+        price_grade = 8
+    else:
+        price_grade = 0
     # 得到车的级别,string
     level_str = res.get("i4")
     if "微型" in level_str:
@@ -332,7 +354,7 @@ def read_info_write_file(specs_id):
     tmp['id'] = specs_id
     tmp['brands_name'] = brands_name
     tmp['price'] = price
-    tmp['level'] = level
+    tmp['grade'] = level
     tmp['displacement'] = displacement
     tmp['seat_num'] = seat_num
     tmp['structure'] = structure
@@ -352,18 +374,65 @@ def read_info_write_file(specs_id):
     tmp['auto_park'] = auto_park
     tmp["intake_mode"] = intake_mode
     tmp['drive_mode'] = drive_mode
+    tmp['price_grade'] = price_grade
     return tmp
 
 
 # 根据字典,执行写入文件的操作
 def write_to_sql_file(one_dict):
-
-
-    pass
+    # 读取字典信息,并把读到的信息组合成一个字符串
+    brands_name = one_dict.get("brands_name")
+    price = one_dict.get("price")
+    price_grade = one_dict.get("price_grade")
+    grade = one_dict.get("grade")
+    displacement = one_dict.get("displacement")
+    seat_num = one_dict.get("seat_num")
+    struct = one_dict.get("structure")
+    energy = one_dict.get('energy')
+    gbox = one_dict.get("gbox")
+    skylight = one_dict.get("skylight")
+    e_contr_seat = one_dict.get("e_contr_seat")
+    gps = one_dict.get("gps")
+    esp = one_dict.get("esp")
+    hid = one_dict.get("hid")
+    leather_seat = one_dict.get("leather_seat")
+    dlcc = one_dict.get("dlcc")
+    auto_air_cond = one_dict.get("auto_air_cond")
+    revers_img = one_dict.get("revers_img")
+    keyless_go = one_dict.get("keyless_go")
+    seat_heat = one_dict.get("seat_heat")
+    auto_park = one_dict.get("auto_park")
+    intake_mode = one_dict.get("intake_mode")
+    drive_mode = one_dict.get("drive_mode")
+    specs_id = one_dict.get("id")
+    sql = "update specs set brands_name = \"%s\" , price =%s ,price_grade=%s, grade=%s , displacement =%s , seat_num=%s" \
+          " ,struct=%s , energy=%s , gbox =%s , skylight=%s , e_contr_seat=%s , gps =%s , esp =%s " \
+          ",hid=%s , leather_seat=%s , dlcc =%s , auto_air_cond=%s , revers_img=%s , keyless_go=%s ," \
+          "seat_heat=%s , auto_park=%s , intake_mode=%s ,drive_mode=%s where id =%s;" % (brands_name,
+                                                                                         price, price_grade, grade,
+                                                                                         displacement, seat_num,
+                                                                                         struct, energy, gbox,
+                                                                                         skylight, e_contr_seat,
+                                                                                         gps, esp, hid,
+                                                                                         leather_seat,
+                                                                                         dlcc, auto_air_cond,
+                                                                                         revers_img, keyless_go,
+                                                                                         seat_heat, auto_park,
+                                                                                         intake_mode, drive_mode,
+                                                                                         specs_id)
+    # 把拼接好的sql文件追加写入到文件中
+    with open("./cheyixiao.sql", "a+") as f1:
+        f1.write('\n' + sql)
 
 
 if __name__ == '__main__':
-    specs_id_list = get_all_cheyixiao_specs_id()
-    for one in specs_id_list:
-        info_dict = read_info_write_file(one)
-        write_to_sql_file(info_dict)
+    # 得到所有的车型id组成的列表
+    # specs_id_list = get_all_cheyixiao_specs_id()
+    specs_id_list=[25894]
+
+    # 遍历车型id列表,获取单个车型的id
+    for one_specs_id in specs_id_list:
+        # 获取信息
+        res = read_info(one_specs_id)
+        # 把信息写入sql文件
+        write_to_sql_file(res)
