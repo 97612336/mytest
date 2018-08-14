@@ -443,7 +443,7 @@ def write_to_sql_file(one_dict):
                                                                                          specs_id)
     # 把拼接好的sql文件追加写入到文件中
     with open("./cheyixiao.sql", "a+") as f1:
-        f1.write('\n' + sql)
+        f1.write(sql + "\n")
 
 
 if __name__ == '__main__':
