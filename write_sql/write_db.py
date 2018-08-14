@@ -46,6 +46,22 @@ def get_all_cheyixiao_specs_id():
     return res_list
 
 
+# 获取车易销中所有brands_name为null的车型id
+def get_null_brands_name_id_list():
+    db = get_db_connection()
+    cursor = db.cursor()
+    sql = 'select id from specs where brands_name is NULL or price=0;'
+    cursor.execute(sql)
+    res = cursor.fetchall()
+    res_list = []
+    for one in res:
+        one_id = one.get("id")
+        res_list.append(one_id)
+    cursor.close()
+    db.close()
+    return res_list
+
+
 # 根据车型id得到车型的配置,并写入配置到文件
 def read_info(specs_id):
     db = get_db_connection()
@@ -72,7 +88,10 @@ def read_info(specs_id):
     except:
         brands_name = ""
     # 得到车型的价格,int实际价格
-    guide_price = res.get("i2")
+    guider_price_sql = 'select guide_price from specs where id = %s ;' % specs_id
+    cursor.execute(guider_price_sql)
+    guider_price_res = cursor.fetchone()
+    guide_price = guider_price_res.get("guide_price")
     if '~' in guide_price:
         price = int(Decimal(str(guide_price).split("万")[0]) * 10000)
     else:
@@ -375,6 +394,8 @@ def read_info(specs_id):
     tmp["intake_mode"] = intake_mode
     tmp['drive_mode'] = drive_mode
     tmp['price_grade'] = price_grade
+    cursor.close()
+    db.close()
     return tmp
 
 
@@ -428,8 +449,11 @@ def write_to_sql_file(one_dict):
 if __name__ == '__main__':
     # 得到所有的车型id组成的列表
     # specs_id_list = get_all_cheyixiao_specs_id()
-    specs_id_list=[25894]
+    # specs_id_list = [25894]
 
+    # 获取所有brands_name为空的车型id
+    specs_id_list = get_null_brands_name_id_list()
+    print(specs_id_list)
     # 遍历车型id列表,获取单个车型的id
     for one_specs_id in specs_id_list:
         # 获取信息
