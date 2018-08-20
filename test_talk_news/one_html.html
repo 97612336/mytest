@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>聊天消息</title>
+    <script type="text/javascript" src="http://cdn.goeasy.io/goeasy.js"></script>
+</head>
+<body>
+
+<script type="text/javascript">
+var goEasy = new GoEasy({appkey: 'BS-32f7d7d4b1ac4a27b83ff09b4e37f821'});
+                goEasy. subscribe({
+
+                 channel: 'csdnNotification',
+
+                 onMessage: function(message){
+
+                              alert('Meessage received:'+message.content);
+
+                           }
+
+                    });
+</script>
+
+</body>
+</html>
