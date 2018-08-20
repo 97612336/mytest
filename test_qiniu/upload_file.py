@@ -16,21 +16,18 @@ def get_keys():
 res_dict = get_keys()
 access_key = res_dict.get("ak")
 secret_key = res_dict.get("sk")
-print(access_key)
-print(secret_key)
 q = Auth(access_key, secret_key)
 
 bucket_name = "webfile"
 
-key = "a.png"
+key = "a.txt"
 
 token = q.upload_token(bucket_name)
-print(token)
-localfile = "./a.png"
+localfile = "./a.txt"
 
 ret, info = put_file(token, key, localfile)
 
 assert ret['key'] == key
 assert ret['hash'] == etag(localfile)
 
-print(ret.get('key'))
+print(info)
