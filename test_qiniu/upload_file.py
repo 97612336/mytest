@@ -1,6 +1,7 @@
 import json
 import os
 import qiniu.config
+import time
 from qiniu import Auth, put_file, etag
 
 
@@ -47,5 +48,9 @@ def upload_file_to_qiniu(file_path, upload_name):
     return new_url
 
 
-res = upload_file_to_qiniu("./a.png", '123.png')
+start_time = time.time()
+res = upload_file_to_qiniu("./a.png", '12.png')
 print(res)
+end_time = time.time()
+cost_time = end_time - start_time
+print(cost_time)
