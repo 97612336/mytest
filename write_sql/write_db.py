@@ -459,16 +459,16 @@ def write_db_down(one_id):
 
 if __name__ == '__main__':
     # 得到所有的车型id组成的列表
-    specs_id_list = get_all_cheyixiao_specs_id()
+    # specs_id_list = get_all_cheyixiao_specs_id()
     # specs_id_list = [25894]
 
     # 获取所有brands_name为空的车型id
-    # specs_id_list = get_null_brands_name_id_list()
+    specs_id_list = get_null_brands_name_id_list()
     print(specs_id_list)
     # 遍历车型id列表,获取单个车型的id
     for one_specs_id in specs_id_list:
         # 获取信息
-        # res = read_info(one_specs_id)
+        res = read_info(one_specs_id)
         # 把信息写入sql文件
-        # write_to_sql_file(res)
-        write_db_down(one_specs_id)
+        write_to_sql_file(res)
+        # write_db_down(one_specs_id)
