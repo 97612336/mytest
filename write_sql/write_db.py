@@ -118,7 +118,21 @@ def read_info(specs_id):
         price_grade = 0
     # 得到车的级别,string
     level_str = res.get("i4")
-    if "微型" in level_str:
+    if "跑车" in level_str:
+        level = 7
+    elif "MPV" in level_str:
+        level = 9
+    elif "微面" in level_str:
+        level = 10
+    elif "微卡" in level_str:
+        level = 11
+    elif "轻客" in level_str:
+        level = 12
+    elif "皮卡" in level_str:
+        level = 13
+    elif "SUV" in level_str:
+        level = 8
+    elif "微型" in level_str:
         level = 1
     elif "小型" in level_str:
         level = 2
@@ -130,20 +144,6 @@ def read_info(specs_id):
         level = 5
     elif "大型" in level_str:
         level = 6
-    elif "跑车" in level_str:
-        level = 7
-    elif "SUV" in level_str:
-        level = 8
-    elif "MPV" in level_str:
-        level = 9
-    elif "微面" in level_str:
-        level = 10
-    elif "微卡" in level_str:
-        level = 11
-    elif "轻客" in level_str:
-        level = 12
-    elif "皮卡" in level_str:
-        level = 13
     else:
         level = 0
 
@@ -442,21 +442,33 @@ def write_to_sql_file(one_dict):
                                                                                          intake_mode, drive_mode,
                                                                                          specs_id)
     # 把拼接好的sql文件追加写入到文件中
-    with open("./cheyixiao.sql", "a+") as f1:
+    with open("./222_insert_into_specs_data.up.sql", "a+") as f1:
+        f1.write(sql + "\n")
+
+
+def write_db_down(one_id):
+    sql = "update specs set brands_name = null , price =0 ,price_grade=0, grade=0 , displacement =0 , seat_num=0" \
+          " ,struct=0 , energy=0 , gbox =0 , skylight=0 , e_contr_seat=0 , gps =0 , esp =0 " \
+          ",hid=0 , leather_seat=0 , dlcc =0 , auto_air_cond=0 , revers_img=0 , keyless_go=0 ," \
+          "seat_heat=0 , auto_park=0 , intake_mode=0 ,drive_mode=0 where id =%s;" % one_id
+
+    # 把拼接好的sql文件追加写入到文件中
+    with open("./222_insert_into_specs_data.down.sql", "a+") as f1:
         f1.write(sql + "\n")
 
 
 if __name__ == '__main__':
     # 得到所有的车型id组成的列表
-    # specs_id_list = get_all_cheyixiao_specs_id()
+    specs_id_list = get_all_cheyixiao_specs_id()
     # specs_id_list = [25894]
 
     # 获取所有brands_name为空的车型id
-    specs_id_list = get_null_brands_name_id_list()
+    # specs_id_list = get_null_brands_name_id_list()
     print(specs_id_list)
     # 遍历车型id列表,获取单个车型的id
     for one_specs_id in specs_id_list:
         # 获取信息
-        res = read_info(one_specs_id)
+        # res = read_info(one_specs_id)
         # 把信息写入sql文件
-        write_to_sql_file(res)
+        # write_to_sql_file(res)
+        write_db_down(one_specs_id)
