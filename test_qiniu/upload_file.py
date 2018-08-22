@@ -49,7 +49,7 @@ def upload_file_to_qiniu(file_path, upload_name):
 
 
 start_time = time.time()
-res = upload_file_to_qiniu("./a.png", '12.png')
+res = upload_file_to_qiniu("a.png", '12.png')
 print(res)
 end_time = time.time()
 cost_time = end_time - start_time
