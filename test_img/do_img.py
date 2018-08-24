@@ -17,7 +17,10 @@ def wirte_url_to_local(url):
     file_path = "imgs/" + file_name + ext
     res = upload_img(file_path)
     os.remove(file_path)
-    return res.get("data").get("url")
+    try:
+        return res.get("data").get("url")
+    except:
+        return ""
 
 
 if __name__ == '__main__':
