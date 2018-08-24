@@ -18,8 +18,10 @@ def wirte_url_to_local(url):
     res = upload_img(file_path)
     os.remove(file_path)
     try:
+        print(res)
         return res.get("data").get("url")
     except:
+        print(res)
         return ""
 
 
