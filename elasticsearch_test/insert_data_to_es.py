@@ -28,7 +28,7 @@ def get_db_connection():
 
 
 # 定义一个文档类
-class Article(Document):
+class Articles(Document):
     title = Text(analyzer='ik_max_word')
     body = Text(analyzer='ik_max_word')
     lines = Integer()
@@ -37,11 +37,9 @@ class Article(Document):
         name = 'test'
 
 
-
 if __name__ == '__main__':
     connections.create_connection(hosts=['localhost'])
     db = get_db_connection()
-    Article.init()
-    article = Article(meta={'id': 8}, title='这是标题2', body='这是文章体2')
+    Articles.init()
+    article = Articles(meta={'id': 8}, title='这是标题2', body='这是文章体2')
     article.save()
-
