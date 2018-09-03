@@ -35,19 +35,13 @@ class Article(Document):
 
     class Index:
         name = 'test'
-        settings = {
-            'number_of_shards': 2
-        }
 
-    def save(self, **kwargs):
-        self.lines = len(self.body.split())
-        return super(Article, self).save(**kwargs)
 
 
 if __name__ == '__main__':
     connections.create_connection(hosts=['localhost'])
     db = get_db_connection()
     Article.init()
-    article = Article(meta={'id': 112}, title='这是标题', body='这是文章体')
+    article = Article(meta={'id': 8}, title='这是标题2', body='这是文章体2')
     article.save()
 
