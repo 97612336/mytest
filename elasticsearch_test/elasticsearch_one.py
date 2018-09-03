@@ -27,7 +27,7 @@ class Article(Document):
         return datetime.now() >= self.published_from
 
 
-# create the mappings in elasticsearch
+# create the mappings in elasticsearch_test
 Article.init()
 
 # create and save and article
