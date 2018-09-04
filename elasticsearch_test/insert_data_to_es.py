@@ -41,5 +41,5 @@ if __name__ == '__main__':
     connections.create_connection(hosts=['localhost'])
     db = get_db_connection()
     Articles.init()
-    article = Articles(meta={'id': 8}, title='这是标题2', body='这是文章体2')
+    article = Articles(meta={'id': 1}, title='测试外网ip插入1214', body='1214阿打算发')
     article.save()
