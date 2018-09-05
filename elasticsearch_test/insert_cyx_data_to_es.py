@@ -229,6 +229,26 @@ def write_specs_to_es(res_list):
         print('保存了一条车型数据%s' % s.id)
 
 
+# 对比es中的数据和数据库中的数据的个数
+def can_do_insert(sql_table_name, es_model):
+    db = get_db_connection()
+    cursor = db.cursor()
+    sql_str = 'select count(1) from %s;' % sql_table_name
+    cursor.execute(sql_str)
+    sql_count_num = cursor.fetchone().get('count(1)')
+    es_count_num = es_model.search().count()
+    cursor.close()
+    db.close()
+    print(sql_count_num)
+    print(es_count_num)
+    if sql_count_num > es_count_num:
+        s = es_model.search().sort({'id': {'order': 'desc'}})[0]
+        last_id = s.id
+        return last_id
+    else:
+        return 0
+
+
 if __name__ == '__main__':
     connections.create_connection(hosts=['127.0.0.1:1235'])
     Users.init()
@@ -236,50 +256,4 @@ if __name__ == '__main__':
     Topic.init()
     Specs.init()
     i = 1
-    while 1:
-        has_data = 1
-        # 读取用户.存入用户
-        users = read_user_from_sql(i)
-        if len(users) > 0:
-            write_user_to_es(users)
-        else:
-            print('用户数据已经读写完毕')
-            has_data = 0
-        # 读取文章,存入文章
-        articles = read_article_from_sql(i)
-        if len(articles) > 0:
-            has_data = 1
-            write_article_to_es(articles)
-        elif has_data == 0:
-            print('文章数据已经读写完毕')
-            has_data = 0
-        else:
-            print('文章数据已经读写完毕')
-            has_data = 1
-        # 读取话题,存入话题
-        topics = read_topic_from_sql(i)
-        if len(topics) > 0:
-            has_data = 1
-            write_topics_to_es(topics)
-        elif has_data == 0:
-            has_data = 0
-            print('话题数据已经读写完毕')
-        else:
-            has_data = 0
-            print('话题数据已经读写完毕')
-        # 读取车型,存入车型
-        specs = read_specs_from_sql(i)
-        if len(specs) > 0:
-            has_data = 1
-            write_specs_to_es(specs)
-        elif has_data == 0:
-            has_data = 0
-            print('车型数据读写完毕')
-        else:
-            has_data = 0
-            print('车型数据读写完毕')
-
-        if has_data == 0:
-            print('所有数据已经读写完毕')
-            break
-        i = i + 1
+    can_do_insert('users', Users)
