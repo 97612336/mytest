@@ -3,6 +3,8 @@ import os
 
 import pymysql
 from decimal import Decimal
+
+import time
 from elasticsearch_dsl import Document, Text, Integer, Date
 from elasticsearch_dsl.connections import connections
 
@@ -80,11 +82,11 @@ class Specs(Document):
 
 
 # 从数据库中读取用户信息
-def read_user_from_sql(n):
-    page_size = 30
+def read_user_from_sql(one_id):
+    page_size = 500
     db = get_db_connection()
     cursor = db.cursor()
-    sql_str = 'select * from users limit %s,%s;' % ((n - 1) * page_size, page_size)
+    sql_str = 'select * from users where id>%s limit %s;' % (one_id, page_size)
     cursor.execute(sql_str)
     users_res = cursor.fetchall()
     res_list = []
@@ -119,11 +121,11 @@ def write_user_to_es(res_list):
 
 
 # 从数据库中读取文章信息
-def read_article_from_sql(n):
-    page_size = 30
+def read_article_from_sql(last_id):
+    page_size = 500
     db = get_db_connection()
     cursor = db.cursor()
-    sql_str = 'select * from articles limit %s,%s;' % ((n - 1) * page_size, page_size)
+    sql_str = 'select * from articles where id>%s limit %s;' % (last_id, page_size)
     cursor.execute(sql_str)
     articles_res = cursor.fetchall()
     res_list = []
@@ -154,11 +156,11 @@ def write_article_to_es(res_list):
 
 
 # 从数据库中读取信息到话题信息
-def read_topic_from_sql(n):
-    page_size = 30
+def read_topic_from_sql(last_id):
+    page_size = 500
     db = get_db_connection()
     cursor = db.cursor()
-    sql_str = 'select * from topics limit %s,%s;' % ((n - 1) * page_size, page_size)
+    sql_str = 'select * from topics where id>%s limit %s;' % (last_id, page_size)
     cursor.execute(sql_str)
     topics_res = cursor.fetchall()
     res_list = []
@@ -187,11 +189,11 @@ def write_topics_to_es(res_list):
 
 
 # 从数据库中读取车型信息
-def read_specs_from_sql(n):
-    page_size = 30
+def read_specs_from_sql(last_id):
+    page_size = 500
     db = get_db_connection()
     cursor = db.cursor()
-    sql_str = 'select * from specs limit %s,%s;' % ((n - 1) * page_size, page_size)
+    sql_str = 'select * from specs where id>%s limit %s;' % (last_id, page_size)
     cursor.execute(sql_str)
     specs_res = cursor.fetchall()
     res_list = []
@@ -239,14 +241,14 @@ def can_do_insert(sql_table_name, es_model):
     es_count_num = es_model.search().count()
     cursor.close()
     db.close()
-    print(sql_count_num)
-    print(es_count_num)
     if sql_count_num > es_count_num:
-        s = es_model.search().sort({'id': {'order': 'desc'}})[0]
-        last_id = s.id
+        s = es_model.search().sort({'id': {'order': 'desc'}})[0:1]
+        last_id = 0
+        for one in s:
+            last_id = one.id
         return last_id
     else:
-        return 0
+        return ''
 
 
 if __name__ == '__main__':
@@ -255,5 +257,34 @@ if __name__ == '__main__':
     Articles.init()
     Topic.init()
     Specs.init()
-    i = 1
-    can_do_insert('users', Users)
+    while 1:
+        start_time = time.time()
+        # 判断是否可以插入用户数据
+        last_user_id = can_do_insert('users', Users)
+        if last_user_id != '':
+            # 当do_user是数字的时候,就从这个id往后插入
+            user_res = read_user_from_sql(last_user_id)
+            write_user_to_es(user_res)
+        # 判断是否可以插入文章数据
+        last_article_id = can_do_insert('articles', Articles)
+        if last_article_id != '':
+            # 当do_article是数字的时候,就从这个id往后插入
+            article_res = read_article_from_sql(last_article_id)
+            write_article_to_es(article_res)
+        # 判断是否可以插入话题数据
+        last_topics_id = can_do_insert('topics', Topic)
+        if last_topics_id != '':
+            # 当do_topics是数字的时候,就从这个id往后插入
+            topics_res = read_topic_from_sql(last_topics_id)
+            write_topics_to_es(topics_res)
+        # 判断是否可以插入车型数据
+        last_specs_id = can_do_insert('specs', Specs)
+        if last_specs_id != '':
+            # 当do_specs是数字的时候,就从这个id往后插入
+            specs_res = read_specs_from_sql(last_specs_id)
+            write_specs_to_es(specs_res)
+        end_time = time.time()
+        print('本次更新共花费了%s秒' % (end_time - start_time))
+        print('休息10分钟...')
+        time.sleep(60 * 10)
+
