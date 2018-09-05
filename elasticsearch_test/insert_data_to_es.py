@@ -88,13 +88,14 @@ def save_to_es(res_list):
         es_article.author = author
         es_article.comment = comment
         es_article.car_name = car_name
+        es_article.id = aid
         es_article.save()
         print('成功保存了一条数据%s' % aid)
 
 
 if __name__ == '__main__':
     start_time = time.time()
-    connections.create_connection(hosts=['localhost'])
+    connections.create_connection(hosts=['127.0.0.1:1235'])
     i = 1
     while True:
         articles = get_article(i)
