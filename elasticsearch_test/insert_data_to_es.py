@@ -65,7 +65,7 @@ def get_article(n):
 # 定义一个文档类
 class Articles(Document):
     title = Text(analyzer='ik_max_word')
-    id = Integer
+    id = Integer()
     author = Text(analyzer='ik_max_word')
     comment = Text(analyzer='ik_max_word')
     car_name = Text(analyzer='ik_max_word')
