@@ -285,6 +285,6 @@ if __name__ == '__main__':
             write_specs_to_es(specs_res)
         end_time = time.time()
         print('本次更新共花费了%s秒' % (end_time - start_time))
-        print('休息10分钟...')
-        time.sleep(60 * 10)
+        print('休息5分钟...')
+        time.sleep(60 * 5)
 
