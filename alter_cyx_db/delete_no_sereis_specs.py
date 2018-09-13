@@ -1,11 +1,6 @@
 import configparser
 import os
-import re
-import time
-import datetime
 import pymysql
-from decimal import Decimal
-import json
 
 
 # 得到连接数据库的connection
