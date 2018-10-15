@@ -20,7 +20,7 @@ class Get_biying(object):
         #得到图片的残缺url
         url_photo=dict_three['url']
         #将图片的残缺url组合成一个完整的url
-        url_photo=r'http://cn.bing.com'+url_photo
+        url_photo=r'https://cn.bing.com'+url_photo
         return url_photo
 
 
