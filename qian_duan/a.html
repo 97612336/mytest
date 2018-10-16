@@ -1,0 +1,41 @@
+<html>
+
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<script>
+    $(document).ready(function () {
+        $("p").click(function () {
+            $(this).hide();
+        });
+    });
+    $(document).ready(function () {
+        $("#b_one").click(function () {
+            $.get("https://cyx.autoforce.net/v2/test/sl2", function (data, status) {
+                alert("数据: " + data.code + "\n状态: " + status);
+            });
+        });
+    });
+    $(function () {
+        $("#b_two").click(function () {
+            $.post("https://cyx.autoforce.net/v2/test/sl2",
+                {
+                    "kind": 1
+                }, function (data, status) {
+                    alert(data.msg + "\n状态: " + status);
+                }
+            );
+        });
+    })
+</script>
+
+<body>
+    <p>如果你点我，我就会消失。</p>
+    <p>继续点我!</p>
+    <p>接着点我!</p>
+    <button id="b_one">发送一个 HTTP GET 请求并获取返回结果</button>
+    <br>
+    <button id="b_two">按钮2</button>
+</body>
+
+</html>
