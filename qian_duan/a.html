@@ -26,6 +26,22 @@
                 }
             );
         });
+    });
+    $(function () {
+        $("#b_three").click(
+            function () {
+                $.post(
+                    "https://cyx.autoforce.net/v2/test/sl2",
+                    {
+                        "kind": 3
+                    },
+                    function (data, status) {
+                        var ele = $("<p>" +data.msg +"</p>");
+                        $("#b_three").after(ele);
+                    }
+                );
+            }
+        );
     })
 </script>
 
@@ -36,6 +52,9 @@
     <button id="b_one">发送一个 HTTP GET 请求并获取返回结果</button>
     <br>
     <button id="b_two">按钮2</button>
+    <hr>
+    <br>
+    <button id="b_three">添加新元素的按钮</button>
 </body>
 
 </html>
