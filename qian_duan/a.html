@@ -4,6 +4,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 </head>
 <script>
+    data = [1, 2, 3, 4, 5];
     $(document).ready(function () {
         $("p").click(function () {
             $(this).hide();
@@ -36,13 +37,27 @@
                         "kind": 3
                     },
                     function (data, status) {
-                        var ele = $("<p>" +data.msg +"</p>");
-                        $("#b_three").after(ele);
+                        var ele = $("<p>" + data.msg + "</p>");
+                        $("#con").append(ele);
                     }
                 );
             }
         );
-    })
+        $("#b_four").click(
+            function () {
+                $("#con").children().first().remove();
+            }
+        );
+        $("#b_five").click(
+            function () {
+                
+                $.each(data, function (key, value) {
+                    alert(value);
+                });
+            }
+        );
+    });
+
 </script>
 
 <body>
@@ -55,6 +70,11 @@
     <hr>
     <br>
     <button id="b_three">添加新元素的按钮</button>
+    <button id="b_four">删除第一个元素</button>
+    <div id="con">
+        <p>123123</p>
+    </div>
+    <button id="b_five">测试遍历</button>
 </body>
 
 </html>
