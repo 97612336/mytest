@@ -4,7 +4,7 @@ import os
 import pymysql
 from urllib import request
 
-import requests
+import requests_test
 
 
 # 获取数据库连接对象
@@ -62,7 +62,7 @@ def upload_one_file(file_path):
                       'Chrome/56.0.2924.87 Safari/537.36'
     }
 
-    res = requests.post(url, data=data, files=files, headers=headers)
+    res = requests_test.post(url, data=data, files=files, headers=headers)
     print("已经上传了,等待响应")
     one_dict = json.loads(res.text)
     if one_dict.get("code") == 200:

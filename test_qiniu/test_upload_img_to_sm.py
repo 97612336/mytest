@@ -1,6 +1,6 @@
 import json
 
-import requests
+import requests_test
 
 
 def upload_img(img_path):
@@ -9,7 +9,7 @@ def upload_img(img_path):
 
     # files = {'file': open(img_path, 'rb')}
     files = {"smfile": open(img_path, 'rb')}
-    res = requests.post(url, files=files)
+    res = requests_test.post(url, files=files)
     json_res = json.loads(res.text)
     return json_res
 

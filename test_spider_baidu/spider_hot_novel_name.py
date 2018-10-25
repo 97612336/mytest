@@ -7,7 +7,7 @@ from lxml import etree
 
 import chardet
 import pymysql
-import requests
+import requests_test
 
 baidu_url = "http://www.baidu.com/baidu?wd="
 baidu_fengyun_url = "http://top.baidu.com/"
@@ -31,7 +31,7 @@ def get_html_text(url):
         "User-Agent": "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:50.0) Gecko/20100101 Firefox/50.0",
     }
     try:
-        res = requests.get(url, headers=headers)
+        res = requests_test.get(url, headers=headers)
     except:
         print("一条记录不能解析%s" % (datetime.datetime.now()))
         return ""

@@ -1,4 +1,4 @@
-import requests
+import requests_test
 
-res = requests.get("https://localhost/a.txt")
+res = requests_test.get("https://localhost/a.txt")
 print(res.text)
