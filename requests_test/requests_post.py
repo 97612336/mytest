@@ -32,17 +32,23 @@ def random_username(len_num):
     return username
 
 
-# 把数据写入文件
-def write_name_to_file(name):
-    with open("web_name2.txt", "a+") as f1:
-        f1.write(name + "\n")
+# 生成随机的4位数字
+def random_num(len_num):
+    nums = ""
+    chars = "0123456789"
+    length = len(chars) - 1
+    random = Random()
+    for i in range(0, len_num):
+        nums += chars[random.randint(0, length)]
+    print(nums)
+    return nums
 
 
-if __name__ == '__main__':
-    web_list = []
-    len_num = 4
-    while 1:
-        name = random_username(len_num)
+# 从0开始往上加数字
+def test_num_web():
+    for i in range(9641,100000000000):
+        name = str(i)
+        print(name)
         res_num = can_use_web(name, ".com")
         if res_num != "0":
             print("+++++++++++++++++++++")
@@ -50,3 +56,25 @@ if __name__ == '__main__':
             print(res_num)
             print("+++++++++++++++++++++")
             write_name_to_file(name)
+
+
+# 把数据写入文件
+def write_name_to_file(name):
+    with open("web_name3.txt", "a+") as f1:
+        f1.write(name + "\n")
+
+
+if __name__ == '__main__':
+    # web_list = []
+    # len_num = 4
+    # while 1:
+    #     name = random_username(len_num)
+    #     # name = random_num(len_num)
+    #     res_num = can_use_web(name, ".com")
+    #     if res_num != "0":
+    #         print("+++++++++++++++++++++")
+    #         print(name)
+    #         print(res_num)
+    #         print("+++++++++++++++++++++")
+    #         write_name_to_file(name)
+    test_num_web()
