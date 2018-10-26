@@ -46,7 +46,7 @@ def random_num(len_num):
 
 # 从0开始往上加数字
 def test_num_web():
-    for i in range(9641,100000000000):
+    for i in range(13191,100000000000):
         name = str(i)
         print(name)
         res_num = can_use_web(name, ".com")

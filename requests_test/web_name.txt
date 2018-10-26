@@ -14,12 +14,13 @@ fzkcm
 idxcs
 lectb
 tyioq
-nlddn
+nlddn		*
 oieej
 ftagp
 xrlij
 pbogu
 mggpt
+mgggn		*
 ocigr
 cdqmn
 xgnbd
@@ -70,7 +71,7 @@ uxsuo
 kpqkm
 itqsf
 elrib
-wwlli
+wwlli		*
 mauqs
 gwijy
 hdabd
@@ -88,7 +89,8 @@ uavxl
 sfiqn
 fnhwm
 fcoli
-eetff
+eetff		*
+eecff		*
 qvect
 rdhlp
 yokjt
@@ -108,7 +110,7 @@ tknzc
 unfku
 juenm
 teryg
-whmow
+whmow		*
 fpxvt
 eeifl
 pgkuo
@@ -442,7 +444,7 @@ hvywu
 zmcty
 kvfxi
 wtemu
-godwh
+godwh		*
 vxcsb
 qcchv
 nzgeg
@@ -568,7 +570,7 @@ djgof
 nyntp
 yrkre
 fnglb
-wudnn
+wudnn		*
 dwaif
 baqfh
 agttn
