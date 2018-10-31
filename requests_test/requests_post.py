@@ -1,7 +1,7 @@
 from random import Random
 
 import requests
-
+import time
 
 # 判断网址是否存在
 def can_use_web(name, suffix):
@@ -46,17 +46,18 @@ def random_num(len_num):
 
 # 从0开始往上加数字
 def test_num_web():
-    for i in range(13191,100000000000):
+    for i in range(16027,100000000000):
         name = str(i)
         print(name)
         res_num = can_use_web(name, ".com")
+        time.sleep(1)
         if res_num != "0":
             print("+++++++++++++++++++++")
             print(name)
             print(res_num)
             print("+++++++++++++++++++++")
             write_name_to_file(name)
-
+            
 
 # 把数据写入文件
 def write_name_to_file(name):
