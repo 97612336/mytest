@@ -9,6 +9,58 @@ import pymysql
 import requests
 
 
+###翻译模块
+# 得到翻译的网页
+def get_translate_html(text):
+    # text="哈哈哈，我最帅"
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:50.0) Gecko/20100101 Firefox/50.0",
+    }
+    one_kind = "en"  # 中文转英文
+    two_kind = "zh-CN"  # 英文转中文
+    base_link = "http://translate.google.cn/m?hl=%s&sl=auto&q=%s"
+    url = base_link % (one_kind, text)
+    try:
+        res = requests.get(url, headers=headers)
+    except:
+        print("一条记录不能解析%s" % (datetime.datetime.now()))
+        return ""
+    html_bytes = res.content
+    code_style = chardet.detect(html_bytes).get("encoding")
+    try:
+        html_text = html_bytes.decode(code_style, "ignore")
+    except:
+        print(datetime.datetime.now())
+        print("encoding is error")
+        return ''
+    return html_text
+
+
+# 解析翻译的网页，获取最终的结果
+def parse_res(res_html):
+    compl_str = "/html/body/div[3]/text()"
+    # 解析HTML文件
+    try:
+        tree = etree.HTML(res_html)
+        res = tree.xpath(compl_str)
+    except:
+        print(datetime.datetime.now())
+        print("can't parse html")
+        return
+    return res
+
+
+# ##
+def chinese_to_english(chinese_str):
+    res = get_translate_html(chinese_str)
+    eng_str = parse_res(res)
+    if len(eng_str) > 0:
+        return eng_str[0]
+    else:
+        return None
+
+
+# 获取sql db
 def get_mysql_db():
     home_path = os.getenv("HOME")
     conf_file_path = home_path + "/conf/sqlconf"
@@ -47,11 +99,13 @@ def html_parser(html_text, compl_str):
     try:
         tree = etree.HTML(html_text)
         res = tree.xpath(compl_str)
-    except:
+    except Exception as e:
         print(datetime.datetime.now())
+        print(e)
         print("can't parse html")
         return
     return res
+
 
 baidu_url = "http://www.baidu.com/baidu?wd="
 baidu_fengyun_url = "http://top.baidu.com/"
@@ -66,7 +120,7 @@ def get_fengyun_words():
     words_list = words_list + now_hot_words
     # 得到七日关注热词
     seven_day_words = html_parser(fengyun_res,
-                                       '//*[@id="main"]/div[1]/div[1]/div[3]/div[2]/ul/li/a[@class="list-title"]/text()')
+                                  '//*[@id="main"]/div[1]/div[1]/div[3]/div[2]/ul/li/a[@class="list-title"]/text()')
     words_list = words_list + seven_day_words
     # 得到今日上榜热词
     new_hot_words_tmp = html_parser(fengyun_res, '//*[@id="flip-list"]/div[1]/div/div/a/text()')
@@ -77,11 +131,11 @@ def get_fengyun_words():
     words_list = words_list + new_hot_words
     #     得到民生热点词
     man_life_words = html_parser(fengyun_res,
-                                      '//*[@id="box-cont"]/div[4]/div[2]/div/div[2]/div[1]/ul/li/div[1]/a[@class="list-title"]/text()')
+                                 '//*[@id="box-cont"]/div[4]/div[2]/div/div[2]/div[1]/ul/li/div[1]/a[@class="list-title"]/text()')
     words_list = words_list + man_life_words
     #     得到热门搜索
     hot_search_words = html_parser(fengyun_res,
-                                        '//*[@id="box-cont"]/div[8]/div[2]/div/div[2]/div[1]/ul/li/div[1]/a[@class="list-title"]/text()')
+                                   '//*[@id="box-cont"]/div[8]/div[2]/div/div[2]/div[1]/ul/li/div[1]/a[@class="list-title"]/text()')
     words_list = words_list + hot_search_words
     words_set = set(words_list)
     return words_set
@@ -150,14 +204,14 @@ def get_article_by_href(one_href):
     article_title = html_parser(article_html, '//*[@id="article"]/div[1]/h2/text()')
     # 获取文章的内容
     article_content = html_parser(article_html,
-                                       '//p/span[@class="bjh-p"]/text()')
+                                  '//p/span[@class="bjh-p"]/text()')
     # 获取文章的图片
     article_imgs = html_parser(article_html, '//div[@class="img-container"]/img/@src')
     if article_title and article_content:
         tmp = {}
-        tmp["title"] = article_title[0]
-        tmp["desc"] = article_content[0]
-        tmp["content"] = article_content
+        tmp["title"] = chinese_to_english(article_title[0])
+        tmp["desc"] = chinese_to_english(article_content[0])
+        tmp["content"] = chinese_to_english(article_content)
         tmp['imgs'] = article_imgs
         return tmp
     else:
@@ -168,6 +222,7 @@ def get_article_by_href(one_href):
 def save_new_article_to_db(cursor, article_data, one_word):
     title = article_data.get('title')
     info = article_data.get('desc')
+    one_word=chinese_to_english(one_word)
     content = pymysql.escape_string(str(article_data.get('content')))
     imgs = pymysql.escape_string(str(article_data.get('imgs')))
     sql_str = 'insert into articles (hot_word,title,info,content,imgs) VALUES(\'%s\',\'%s\',\'%s\',\'%s\',\'%s\');' % (
@@ -184,16 +239,15 @@ def save_new_article_to_db(cursor, article_data, one_word):
 if __name__ == '__main__':
     while 1:
         # 获取数据库链接对象
-        # try:
-        #     db = get_mysql_db()
-        # except Exception as e:
-        #     print(e)
-        #     break
-        # cursor = db.cursor()
+        try:
+            db = get_mysql_db()
+        except Exception as e:
+            print(e)
+            break
+        cursor = db.cursor()
         # 得到所有搜索的热词
         hot_set = get_fengyun_words()
         print("共得到%s个关键词" % len(hot_set))
-        print(hot_set)
         # 遍历每个热词，然后搜索每个热词，得到html网页里所有百度的链接
         for one_word in hot_set:
             # 根据一个搜索的关键词查询所有的百度快照url
@@ -202,11 +256,11 @@ if __name__ == '__main__':
                 # 得到百度快照ＵＲＬ的内容
                 article_data = get_article_by_href(one_href)
                 # 执行存入数据库的操作
-                # if article_data:
-                #     save_new_article_to_db(cursor, article_data, one_word)
+                if article_data:
+                    save_new_article_to_db(cursor, article_data, one_word)
         # del_week_age_articles()
-        # cursor.close()
-        # db.close()
+        cursor.close()
+        db.close()
         # 休息十个小时
-        print("运行完一次，休息13个小时")
-        time.sleep(60 * 60 * 13)
+        print("运行完一次，休息24个小时")
+        time.sleep(60 * 60 * 24)
