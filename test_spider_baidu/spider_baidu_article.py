@@ -262,5 +262,5 @@ if __name__ == '__main__':
         cursor.close()
         db.close()
         # 休息十个小时
-        print("运行完一次，休息24个小时")
-        time.sleep(60 * 60 * 24)
+        print("运行完一次，休息20个小时")
+        time.sleep(60 * 60 * 20)
