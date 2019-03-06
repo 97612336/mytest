@@ -7,7 +7,7 @@ from lxml import etree
 
 import chardet
 import pymysql
-import requests_test
+import requests
 
 baidu_url = "http://www.baidu.com/baidu?wd="
 baidu_fengyun_url = "http://top.baidu.com/"
@@ -31,8 +31,9 @@ def get_html_text(url):
         "User-Agent": "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:50.0) Gecko/20100101 Firefox/50.0",
     }
     try:
-        res = requests_test.get(url, headers=headers)
-    except:
+        res = requests.get(url, headers=headers)
+    except Exception as e:
+        print(e)
         print("一条记录不能解析%s" % (datetime.datetime.now()))
         return ""
     html_bytes = res.content
@@ -61,6 +62,7 @@ def html_parser(html_text, compl_str):
 # 得到热搜的关键词
 def get_fengyun_words():
     fengyun_res = get_html_text(baidu_fengyun_url)
+    print(fengyun_res)
     words_list = html_parser(fengyun_res,
                              '//*[@id="box-cont"]/div[3]/div[2]/div/div[2]/div[1]/ul/li/div[1]/a[1]/text()')
     res_str = ""
