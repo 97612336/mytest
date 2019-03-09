@@ -117,7 +117,8 @@ def get_fengyun_words():
     fengyun_res = get_html_text(baidu_fengyun_url)
     # 得到实时热点关键词
     now_hot_words = html_parser(fengyun_res, '//*[@id="hot-list"]/li/a[@class="list-title"]/text()')
-    words_list = words_list + now_hot_words
+    if now_hot_words:
+        words_list = words_list + now_hot_words
     # 得到七日关注热词
     seven_day_words = html_parser(fengyun_res,
                                   '//*[@id="main"]/div[1]/div[1]/div[3]/div[2]/ul/li/a[@class="list-title"]/text()')
@@ -211,7 +212,14 @@ def get_article_by_href(one_href):
         tmp = {}
         tmp["title"] = chinese_to_english(article_title[0])
         tmp["desc"] = chinese_to_english(article_content[0])
-        tmp["content"] = chinese_to_english(article_content)
+        content_list = []
+        # 遍历文章集合的元素，然后逐段翻译
+        for one_content in article_content:
+            new_one_content = chinese_to_english(one_content)
+            if new_one_content:
+                new_one_content = new_one_content.replace("\"", "“")
+            content_list.append(new_one_content)
+        tmp["content"] = content_list
         tmp['imgs'] = article_imgs
         return tmp
     else:
@@ -222,7 +230,7 @@ def get_article_by_href(one_href):
 def save_new_article_to_db(cursor, article_data, one_word):
     title = article_data.get('title')
     info = article_data.get('desc')
-    one_word=chinese_to_english(one_word)
+    one_word = chinese_to_english(one_word)
     content = pymysql.escape_string(str(article_data.get('content')))
     imgs = pymysql.escape_string(str(article_data.get('imgs')))
     sql_str = 'insert into articles (hot_word,title,info,content,imgs) VALUES(\'%s\',\'%s\',\'%s\',\'%s\',\'%s\');' % (
@@ -256,9 +264,9 @@ if __name__ == '__main__':
                 # 得到百度快照ＵＲＬ的内容
                 article_data = get_article_by_href(one_href)
                 # 执行存入数据库的操作
+                print(article_data)
                 if article_data:
                     save_new_article_to_db(cursor, article_data, one_word)
-        # del_week_age_articles()
         cursor.close()
         db.close()
         # 休息十个小时

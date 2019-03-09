@@ -1,0 +1,15 @@
+import json
+
+test_str = "['With the gradual approach of the US presidential election in 2020, Hillary Clinton, who lost to Trump in the 2016 election, will compete in the presidency again. He has been in a state of confusing. On January 27, according to CNN, Hillary did not completely rule out the possibility of participating in the 2020 presidential election. According to sources, Hillary once told her assistant that she did not give up the idea of \u200b\u200bparticipating in the 2020 presidential campaign. However, just on Tuesday, January 29, CNN issued another report. Hillary’s former presidential campaign committee chairman said that Hillary told him that he would not participate in the 2020 presidential election. To be honest, the words of the source are credible, or the words of the former chairman of the campaign committee are credible, and the reader is willing to choose the latter.', 'John Podesta, who served as chairman of the Clinton presidential campaign committee during the 2016 US presidential election, said in an interview with CNN on Tuesday: “Hillary said she will not participate in the 2020 presidential election, I I think that if she is elected, she will be a very great president. However, there are many outstanding candidates in the Democratic Party. I think the Democratic primary will be full of vitality because the people who participated in the primary election have many great ideas. “.', 'Speaking of John Podesta, it is not a simple character. He was born on January 8, 1949, and served as Deputy Director of the White House Secretary and General Office from January 20, 1993 to October 20, 1998. From October 20th to January 20th, 2001, he served as the director of the White House Office of former US President Bill Clinton. With this relationship, dear readers should understand why he is the chairman of Hillary’s campaign committee. From January 1, 2014 to February 13, 2015, he served as a consultant to President Barack Obama. He is currently the Chairman and Advisor of the Center for American Progress in the think tank of Washington, DC, and a visiting professor at the Georgetown University Law Center.', 'I personally think that Hillary’s chances of participating in the 2020 presidential election are not too big. The first is age. By 2020, she is over 70 years old. Compared with other candidates in the Democratic Party, the age is not dominant. . Secondly, she has participated in the 2016 presidential election, and the mail gate has not yet completely ended. In this case, the Democratic Party may be more willing to choose a new person to compete with Trump.', 'The results of the US presidential election vote on November 8, 2016 showed that Trump received 304 votes from the electoral group and Hillary received 227 votes. Although Hillary’s total votes were in the rank of Lumpdo, due to the current indirect election system. Her advantage is invalid and she can only return.']"
+
+test_str2 = '''
+[1,2,3]
+'''
+
+test_str3 = '["1","2","3"]'
+
+print(test_str3)
+
+res = json.loads(test_str3)
+
+print(res)
