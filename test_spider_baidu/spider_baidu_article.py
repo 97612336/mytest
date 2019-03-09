@@ -217,8 +217,8 @@ def get_article_by_href(one_href):
         for one_content in article_content:
             new_one_content = chinese_to_english(one_content)
             if new_one_content:
-                new_one_content = new_one_content.replace("\"", "“")
-            content_list.append(new_one_content)
+                new_one_content = new_one_content.replace("\"", "“").replace("\'","“")
+                content_list.append(new_one_content)
         tmp["content"] = content_list
         tmp['imgs'] = article_imgs
         return tmp
@@ -264,7 +264,6 @@ if __name__ == '__main__':
                 # 得到百度快照ＵＲＬ的内容
                 article_data = get_article_by_href(one_href)
                 # 执行存入数据库的操作
-                print(article_data)
                 if article_data:
                     save_new_article_to_db(cursor, article_data, one_word)
         cursor.close()
