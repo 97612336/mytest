@@ -54,7 +54,7 @@ def parse_res(res_html):
 def chinese_to_english(chinese_str):
     res = get_translate_html(chinese_str)
     eng_str = parse_res(res)
-    if eng_str > 0:
+    if eng_str:
         return eng_str[0]
     else:
         return None
