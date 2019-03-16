@@ -54,7 +54,7 @@ def parse_res(res_html):
 def chinese_to_english(chinese_str):
     res = get_translate_html(chinese_str)
     eng_str = parse_res(res)
-    if len(eng_str) > 0:
+    if eng_str > 0:
         return eng_str[0]
     else:
         return None
@@ -217,7 +217,7 @@ def get_article_by_href(one_href):
         for one_content in article_content:
             new_one_content = chinese_to_english(one_content)
             if new_one_content:
-                new_one_content = new_one_content.replace("\"", "“").replace("\'","“")
+                new_one_content = new_one_content.replace("\"", "“").replace("\'", "“")
                 content_list.append(new_one_content)
         tmp["content"] = content_list
         tmp['imgs'] = article_imgs
@@ -238,10 +238,10 @@ def save_new_article_to_db(cursor, article_data, one_word):
     try:
         cursor.execute(sql_str)
         db.commit()
+        print("成功存入一条数据：%s" % datetime.datetime.now())
     except Exception as e:
-        print(sql_str)
         print(e)
-    print("成功存入一条数据：%s" % datetime.datetime.now())
+
 
 
 if __name__ == '__main__':
