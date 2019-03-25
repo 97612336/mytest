@@ -12,6 +12,7 @@ class Search_tsz_photos(object):
         start_num=0
         while 1:
             url = r'http://wallpaper.apc.360.cn/index.php?c=WallPaper&a=search&start=' + str(start_num) + '&count=100&kw=' + str(str_search)
+            print(url)
             start_num=start_num+100
             #一页的图片
             list_one_page_photo=self.search_one_page_photo(url)
@@ -84,11 +85,8 @@ class Search_tsz_photos(object):
         return list_one_page_photo
 
 
-# s=Search_tsz_photos()
-# list_photo=s.get_all_photo('熊猫')
-# print(len(list_photo))
-# for one in list_photo:
-#     print(one)
-# list1=s.get_only_one_page('美女',2)
-# print(len(list1))
-# print(list1)
+s=Search_tsz_photos()
+list_photo=s.get_all_photo('天眼')
+print(len(list_photo))
+for one in list_photo:
+    print(one)
