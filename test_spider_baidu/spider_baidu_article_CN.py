@@ -267,24 +267,26 @@ def get_article_by_href(nw, one_href):
                 tmp_content["type"] = 1
                 tmp_content["text"] = new_one_content
                 content_list.append(tmp_content)
-                tmp_img={}
-                tmp_img["type"]=0
-                tmp_img["text"]=get_one_random_photo()
+                tmp_img = {}
+                tmp_img["type"] = 0
+                tmp_img["text"] = get_one_random_photo()
                 content_list.append(tmp_img)
         tmp["content"] = content_list
+        tmp["img"] = get_one_random_photo()
         return tmp
     else:
         return 0
 
 
 # 根据解析到的数据保存到数据库中
-def save_new_article_to_db(nw,cursor, article_data, one_word):
+def save_new_article_to_db(nw, cursor, article_data, one_word):
     title = article_data.get('title')
     info = article_data.get('desc')
     one_word = nw.get_new_words(one_word)
     content = pymysql.escape_string(str(article_data.get('content')))
-    sql_str = 'insert into cn_articles (hot_word,title,info,content) VALUES(\'%s\',\'%s\',\'%s\',\'%s\');' % (
-        one_word, title, info, content)
+    img = article_data.get("img")
+    sql_str = 'insert into cn_articles (hot_word,title,info,content,img) VALUES(\'%s\',\'%s\',\'%s\',\'%s\',\'%s\');' % (
+        one_word, title, info, content,img)
     try:
         cursor.execute(sql_str)
         db.commit()
@@ -315,7 +317,7 @@ if __name__ == '__main__':
                 article_data = get_article_by_href(nw, one_href)
                 # 执行存入数据库的操作
                 if article_data:
-                    save_new_article_to_db(nw,cursor, article_data, one_word)
+                    save_new_article_to_db(nw, cursor, article_data, one_word)
         cursor.close()
         db.close()
         # 休息十个小时
