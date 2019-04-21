@@ -162,8 +162,8 @@ def correct_colours(im1, im2, landmarks1):
             im2_blur.astype(numpy.float64))
 
 
-im1, landmarks1 = read_im_and_landmarks(sys.argv[1])
-im2, landmarks2 = read_im_and_landmarks(sys.argv[2])
+im1, landmarks1 = read_im_and_landmarks(input("第一张图片："))
+im2, landmarks2 = read_im_and_landmarks(input("第二张图片："))
 
 M = transformation_from_points(landmarks1[ALIGN_POINTS],
                                landmarks2[ALIGN_POINTS])
