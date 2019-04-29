@@ -1,9 +1,12 @@
 import json
-import os
 
-import imgkit
+from docx.shared import Inches
+from pyecharts import options as opts
+from pyecharts.charts import Page, Radar, Line, Bar, Grid
 import requests
-from pyecharts import Radar
+from snapshot_selenium import snapshot as driver
+from pyecharts.render import make_snapshot
+from docx import Document
 
 api1 = 'http://47.94.133.29/backstage_detail/warning_describe/?id=300266201708031&end_date=2018-09-03 '
 api2 = 'http://47.94.133.29/backstage_detail/warning_describe/?id=300266201708031&end_date=2018-09-03 '
@@ -12,8 +15,24 @@ api2 = 'http://47.94.133.29/backstage_detail/warning_describe/?id=30026620170803
 def get_api_dict(url):
     json_one = requests.get(url).text
     radar_dict_str = json.loads(json_one)['risk_radar']
+    company_name = json.loads(json_one)["stock_name"]
     radar_dict = json.loads(radar_dict_str)
-    return radar_dict
+    return radar_dict, company_name
+
+
+def radar_base(schema, value, company_name) -> Radar:
+    c = (
+        Radar()
+            .add_schema(
+            schema=schema,
+            shape='circle',
+            textstyle_opts=opts.TextStyleOpts(font_size=20),
+        )
+            .add(company_name, value, areastyle_opts=opts.AreaStyleOpts(color='red', opacity=0.5))
+            .set_series_opts(label_opts=opts.LabelOpts(is_show=False))
+            .set_global_opts(title_opts=opts.TitleOpts(title="雷达预警图"))
+    )
+    return c
 
 
 name_dict = {
@@ -27,9 +46,9 @@ name_dict = {
     "good_anno": "利好公告"
 }
 
-# 创建雷达HTML
-dict_one = get_api_dict(api1)
-radar = Radar("预警雷达", is_animation=False)
+# 生成雷达图片
+dict_one, company_name = get_api_dict(api1)
+print('生成了数据1')
 value_list = [[]]
 c_schema = []
 for key, value in dict_one.items():
@@ -40,11 +59,55 @@ for key, value in dict_one.items():
     tmp['min'] = -1
     c_schema.append(tmp)
     value_list[0].append(value)
-print(value_list)
-print(c_schema)
-radar.config(c_schema=c_schema)
-radar.add('图形一', value_list, legend_text_size=20, area_color='red', area_opacity=0.5)
-radar.render('radar.html')
 
-# 生成radar.png图片
-imgkit.from_file('radar.html', 'radar.jpg')
+radar = radar_base(schema=c_schema, value=value_list, company_name=company_name)
+make_snapshot(driver, radar.render(), 'radar.png')
+
+
+# 获取折线图和柱状图
+def grid_horizontal(name_list, value_list, company_name):
+    line = (
+        Line()
+            .add_xaxis(name_list)
+            .add_yaxis(company_name, value_list)
+            .set_global_opts(
+            title_opts=opts.TitleOpts(title="Grid-Line", pos_right="5%"),
+            legend_opts=opts.LegendOpts(pos_right="20%"),
+        )
+    )
+    bar = (
+        Bar()
+            .add_xaxis(name_list)
+            .add_yaxis(company_name, value_list)
+            .set_global_opts(title_opts=opts.TitleOpts(title="Bar-基本示例", subtitle="我是副标题"))
+    )
+
+    grid = (
+        Grid()
+            .add(line, grid_opts=opts.GridOpts(pos_left="55%"))
+            .add(bar, grid_opts=opts.GridOpts(pos_right="55%"))
+    )
+    return grid
+
+
+dict_two, company_name = get_api_dict(api2)
+print('生成了数据2')
+name_list2 = []
+value_list2 = []
+
+for key, value in dict_two.items():
+    name_list2.append(name_dict[key])
+    value_list2.append(value)
+
+grid = grid_horizontal(name_list=name_list2, value_list=value_list2, company_name=company_name)
+make_snapshot(driver, grid.render(), 'grid.png')
+
+print("图片已经生成完毕")
+# 将两张图片保存到word里
+
+document = Document()
+document.add_heading("数据图表展示")
+document.add_picture('radar.png', width=Inches(5.0))
+document.add_picture('grid.png', width=Inches(5.0))
+document.save('one_file.docx')
+print('文档生成完毕')
