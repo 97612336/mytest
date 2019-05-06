@@ -20,7 +20,7 @@ class SiMu(Document):
         name = 'simu'
 
 
-search_words = '基金'
+search_words = '第二基金'
 simu = SiMu.search()
 multi_match = MultiMatch(query=search_words, fields=['fundName'])
 res = simu.query(multi_match)[0:20]
