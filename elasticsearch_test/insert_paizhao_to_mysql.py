@@ -43,6 +43,4 @@ for one in response.aggregations.one_kind.buckets:
     # 单个的不重复的值
     print(one.key)
     paizhao_name = one.key
-    res_name = str(paizhao_name).strip()
-    print(res_name)
-    insert_data(res_name)
+    insert_data(paizhao_name)
