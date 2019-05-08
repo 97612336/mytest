@@ -1,4 +1,4 @@
-from elasticsearch_dsl import connections, Document, Text, Long
+from elasticsearch_dsl import connections, Document, Text, Long, Search
 from elasticsearch_dsl.query import MultiMatch
 
 es_url = '219.224.134.214:9506'
@@ -28,3 +28,8 @@ print(res)
 for one in res:
     print(one.id)
     print(one.fundName)
+
+print('====================================')
+
+prv = Search().using(es).index('private_net_value')
+print(prv.count())
