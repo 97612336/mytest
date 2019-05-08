@@ -32,3 +32,10 @@ print(res1.count())
 
 res2 = Search().using(es).index('private_net_value')
 print(res2.count())
+print('==========================')
+
+one_str = '南京璟恒投资管理有限公司'
+res3 = Search().using(es).index('paizhao').query('match', jigouquancheng=one_str)
+print(res3.count())
+for one in res3:
+    print(one)
