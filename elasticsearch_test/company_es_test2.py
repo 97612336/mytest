@@ -51,13 +51,11 @@ for one in simu:
 print('=========================')
 
 # 测试多条件查询，最终完成版
-search_words = '第二基金呵呵'
-multi_match = MultiMatch(query=search_words, fields=['fundName'])
+search_words = '天津歌斐资产管理有限公司'
+multi_match = MultiMatch(query=search_words, fields=['institution_name'])
 
-zhihu = Search().using(client).index('simu').query(multi_match)
+zhihu = Search().using(client).index('finance_license').query(multi_match)
 
 for one in zhihu:
-    print(one)
-    print(one.fundName)
-    print(one.id)
-    print(one.managerName)
+    print(one.institution_name)
+    print(one.license_name)
