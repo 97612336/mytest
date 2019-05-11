@@ -107,4 +107,3 @@ if __name__ == '__main__':
     # insert_finan_kind(es, db)
     # 插入公司信息
     insert_company(es, db)
-    
