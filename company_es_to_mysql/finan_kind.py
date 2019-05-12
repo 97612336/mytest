@@ -15,10 +15,10 @@ def get_es():
 # 获取mysql的链接
 def get_mysql_db():
     conf_dict = {
-        'SqlHost': '127.0.0.1',
-        'SqlPort': 3306,
+        'SqlHost': '219.224.134.214',
+        'SqlPort': 3307,
         'SqlUser': 'root',
-        'SqlPassword': 'root123456',
+        'SqlPassword': 'mysql3307',
     }
     conn = pymysql.connect(host=conf_dict.get("SqlHost"), port=int(conf_dict.get("SqlPort")),
                            user=conf_dict.get("SqlUser"), password=conf_dict.get("SqlPassword"),
