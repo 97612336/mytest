@@ -1,14 +1,29 @@
+import json
+import os
+
 import requests
 from requests.cookies import RequestsCookieJar
 
 session = requests.session()
+
+
+def get_password():
+    home_path = os.getenv('HOME')
+    conf_path = os.path.join(home_path, 'conf')
+    key_conf = os.path.join(conf_path, 'tkzs_conf')
+    with open(key_conf, 'r') as f:
+        key = f.read()
+    return key.strip()
+
+
 # 模拟登录
 ######################
 login_url = 'http://www.taokezhushou.com/login'
 login_data = {
     "mobile": "18610211913",
-    "password": ""
+    "password": get_password()
 }
+print(get_password())
 login_res = session.post(login_url, data=login_data)
 with open('b.html', 'w') as f:
     f.write(login_res.text)
@@ -23,17 +38,24 @@ with open('b.html', 'w') as f:
 # session.cookies.update(c)
 # print(session.cookies.get_dict())
 cookies_dict = session.cookies.get_dict()
+# print(cookies_dict)
 ######################
 
 url = 'http://www.taokezhushou.com/zhuanlian'
 
 data = {
-    "goods_id": "590206784802",
-    "coupon_id": "2c81a3603d34430aa83d15e8e4a61758",
-    'text': '女式拖鞋沙滩防滑人字拖鞋女夏季外穿夹脚',
+    "goods_id": "583057046377",
+    "coupon_id": "78ec59c96a0f464dbdbda8f4340a83e0",
+    'text': '【买1送1】湖南特产剁辣椒酱',
     'pid': 'mm_53822622_17578204_63648225',
     'resp': 'td'
 }
 
-res = requests.post(url=url, data=data, cookies=cookies_dict)
-print(res.text)
+headers = {
+    "User-Agent": "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Mobile Safari/537.36",
+}
+
+res = requests.post(url=url, data=data, cookies=cookies_dict, headers=headers)
+
+res_dict = json.loads(res.text)
+print(res_dict)
