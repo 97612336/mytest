@@ -7,13 +7,15 @@ from requests.cookies import RequestsCookieJar
 session = requests.session()
 
 
-def get_password():
+# api配置信息
+def get_info():
     home_path = os.getenv('HOME')
     conf_path = os.path.join(home_path, 'conf')
     key_conf = os.path.join(conf_path, 'tkzs_conf')
     with open(key_conf, 'r') as f:
-        key = f.read()
-    return key.strip()
+        res_text = f.read()
+    info_dict = json.loads(res_text)
+    return info_dict
 
 
 # 模拟登录
@@ -21,9 +23,8 @@ def get_password():
 login_url = 'http://www.taokezhushou.com/login'
 login_data = {
     "mobile": "18610211913",
-    "password": get_password()
+    "password": get_info().get('password')
 }
-print(get_password())
 login_res = session.post(login_url, data=login_data)
 with open('b.html', 'w') as f:
     f.write(login_res.text)
