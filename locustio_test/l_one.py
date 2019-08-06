@@ -2,7 +2,7 @@ from locust import HttpLocust, TaskSet
 
 
 def index(l):
-    l.client.get("/goods?kind=0&page=1")
+    l.client.get("/")
 
 
 class UserBehavior(TaskSet):
