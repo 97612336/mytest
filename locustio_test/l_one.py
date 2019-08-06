@@ -1,22 +1,15 @@
-from locust import HttpLocust, TaskSet, task
+from locust import HttpLocust, TaskSet
 
 
 def index(l):
-    l.client.get("http://www.xbiquge.la/")
+    l.client.get("/goods?kind=0&page=1")
 
 
-class UserTasks(TaskSet):
-    # 列出需要测试的任务形式一
-    tasks = [index]
-
-    # 列出需要测试的任务形式二
-    @task
-    def page404(self):
-        self.client.get("/does_not_exist")
+class UserBehavior(TaskSet):
+    tasks = {index: 1}
 
 
 class WebsiteUser(HttpLocust):
-    host = "http://127.0.0.1:8089"
-    min_wait = 2000
-    max_wait = 5000
-    task_set = UserTasks
+    task_set = UserBehavior
+    min_wait = 5000
+    max_wait = 9000
