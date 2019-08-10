@@ -68,6 +68,9 @@ def do_all_list(one_list):
         # 科目介绍
         subject_name = one.get("column9")
         if subject_name:
+            if "（" in subject_name:
+                subject_name = str(subject_name).split("（")[0]
+        if subject_name:
             subject_name = subject_name.strip()
         subject_target = one.get("column10")
         if subject_target:
@@ -116,6 +119,7 @@ def do_all_list(one_list):
                 img_dict["883"].append(img_head_url + "883/" + str(subject_name) + str(i + 1) + "_883.png")
                 img_dict['img'].append(img_head_url + 'img/' + str(subject_name) + str(i + 1) + '.png')
         format_data[db_subject_id] = {
+            "id": db_subject_id,
             "first_subject": first_subject,
             "second_subject": second_subject,
             "third_subject": third_subject,
@@ -131,7 +135,11 @@ def do_all_list(one_list):
 # 生成sql
 def create_sql_string(format_data):
     sql_string = ""
+    i = 0
     for key, value in format_data.items():
+        i = i + 1
+        print(i)
+        subject_id = value.get("id")
         first_subject = value.get("first_subject")
         second_subject = value.get('second_subject')
         third_subject = value.get("third_subject")
@@ -141,8 +149,9 @@ def create_sql_string(format_data):
         imgs_string = pymysql.escape_string(str(img_dict))
         introduction = value.get('introduction')
         update_time = value.get('update_time')
-        one_sql = 'insert into subject(first_subject,second_subject,third_subject,fourth_subject,fifth_subject,photo_path,introduction,update_time) values("%s","%s","%s","%s","%s","%s","%s","%s");' % (
-            first_subject, second_subject, third_subject, fourth_subject, fifth_subject, imgs_string, introduction,
+        one_sql = 'insert into subject(id,first_subject,second_subject,third_subject,fourth_subject,fifth_subject,photo_path,introduction,update_time) values("%s","%s","%s","%s","%s","%s","%s","%s","%s");' % (
+            subject_id, first_subject, second_subject, third_subject, fourth_subject, fifth_subject, imgs_string,
+            introduction,
             update_time
         )
         one_row_sql = one_sql.replace("'", '"')
