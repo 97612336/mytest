@@ -58,6 +58,8 @@ def do_all_list(one_list):
     format_data = {}
     for one in one_list:
         subject_id = one.get("column6")
+        if subject_id == None:
+            continue
         db_subject_id = int(subject_id)
         first_subject = one.get('column1')
         second_subject = one.get("column2")
@@ -67,6 +69,13 @@ def do_all_list(one_list):
         updatetime = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         # 科目介绍
         subject_name = one.get("column9")
+        hardness = 1
+        if "简单" in subject_name:
+            hardness = 1
+        if "中等" in subject_name:
+            hardness = 2
+        if "困难" in subject_name:
+            hardness = 3
         if subject_name:
             if "（" in subject_name:
                 subject_name = str(subject_name).split("（")[0]
@@ -127,7 +136,8 @@ def do_all_list(one_list):
             "fifth_subject": fifth_subject,
             "photo_path": img_dict,
             "introduction": intro_string,
-            "update_time": updatetime
+            "update_time": updatetime,
+            "hardness": hardness
         }
     return format_data
 
@@ -135,11 +145,9 @@ def do_all_list(one_list):
 # 生成sql
 def create_sql_string(format_data):
     sql_string = ""
-    i = 0
     for key, value in format_data.items():
-        i = i + 1
-        print(i)
         subject_id = value.get("id")
+        print(subject_id)
         first_subject = value.get("first_subject")
         second_subject = value.get('second_subject')
         third_subject = value.get("third_subject")
@@ -149,10 +157,11 @@ def create_sql_string(format_data):
         imgs_string = pymysql.escape_string(str(img_dict))
         introduction = value.get('introduction')
         update_time = value.get('update_time')
-        one_sql = 'insert into subject(id,first_subject,second_subject,third_subject,fourth_subject,fifth_subject,photo_path,introduction,update_time) values("%s","%s","%s","%s","%s","%s","%s","%s","%s");' % (
+        hardness = value.get("hardness")
+        one_sql = 'insert into subject(id,first_subject,second_subject,third_subject,fourth_subject,fifth_subject,photo_path,introduction,update_time,hardness) values("%s","%s","%s","%s","%s","%s","%s","%s","%s",%s);' % (
             subject_id, first_subject, second_subject, third_subject, fourth_subject, fifth_subject, imgs_string,
             introduction,
-            update_time
+            update_time, hardness
         )
         one_row_sql = one_sql.replace("'", '"')
         sql_string = sql_string + one_row_sql
