@@ -62,10 +62,35 @@ def do_all_list(one_list):
             continue
         db_subject_id = int(subject_id)
         first_subject = one.get('column1')
+        if first_subject:
+            if "（" in first_subject:
+                first_subject = str(first_subject).split("（")[0]
+            elif "(" in first_subject:
+                first_subject = str(first_subject).split("(")[0]
         second_subject = one.get("column2")
+        if second_subject:
+            if "（" in second_subject:
+                second_subject = str(second_subject).split("（")[0]
+            elif "(" in second_subject:
+                second_subject = str(second_subject).split("(")[0]
         third_subject = one.get("column3")
+        if third_subject:
+            if "（" in third_subject:
+                third_subject = str(third_subject).split("（")[0]
+            elif "(" in third_subject:
+                third_subject = str(third_subject).split("(")[0]
         fourth_subject = one.get("column4")
+        if fourth_subject:
+            if "（" in fourth_subject:
+                fourth_subject = str(fourth_subject).split("（")[0]
+            elif "(" in fourth_subject:
+                fourth_subject = str(fourth_subject).split("(")[0]
         fifth_subject = one.get('column5')
+        if fifth_subject:
+            if "（" in fifth_subject:
+                fifth_subject = str(fifth_subject).split("（")[0]
+            elif "(" in fifth_subject:
+                fifth_subject = str(fifth_subject).split("(")[0]
         updatetime = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         # 科目介绍
         subject_name = one.get("column9")
