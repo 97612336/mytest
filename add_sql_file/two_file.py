@@ -104,32 +104,40 @@ def do_all_list(one_list):
         if subject_name:
             if "（" in subject_name:
                 subject_name = str(subject_name).split("（")[0]
+        intro_string = ""
         if subject_name:
             subject_name = subject_name.strip()
+            intro_string = intro_string + "<h2>科目名称</h2><p>%s</p>" % (subject_name)
         subject_target = one.get("column10")
         if subject_target:
             subject_target = subject_target.strip()
+            intro_string = intro_string + "<h2>科目目标</h2><p>%s</p>" % (subject_target)
         dongzuoyaoling = one.get("column11")
         if dongzuoyaoling:
             dongzuoyaoling = dongzuoyaoling.strip()
+            intro_string = intro_string + "<h2>动作要领</h2><p>%s</p>" % (dongzuoyaoling)
         xunlianyaoqiu = one.get("column12")
         if xunlianyaoqiu:
             xunlianyaoqiu = xunlianyaoqiu.strip()
+            intro_string = intro_string + "<h2>训练要求</h2><p>%s</p>" % (xunlianyaoqiu)
         changdiqicai = one.get("column13")
         if changdiqicai:
             changdiqicai = changdiqicai.strip()
+            intro_string = intro_string + "<h2>场地器材</h2><p>%s</p>" % (changdiqicai)
         huxifangfa = one.get("column14")
         if huxifangfa:
             huxifangfa = huxifangfa.strip()
+            intro_string = intro_string + "<h2>呼吸方法</h2><p>%s</p>" % (huxifangfa)
         changjianwenti = one.get("column15")
         if changjianwenti:
             changjianwenti = changjianwenti.strip()
+            intro_string = intro_string + "<h2>常见问题</h2><p>%s</p>" % (changjianwenti)
         jiejuebanfa = one.get("column16")
         if jiejuebanfa:
             jiejuebanfa = jiejuebanfa.strip()
-        intro_string = "<h2>科目名称</h2><p>%s</p><h2>科目目标</h2><p>%s</p><h2>动作要领</h2><p>%s</p><h2>训练要求</h2><p>%s</p><h2>场地器材</h2><p>%s</p><h2>呼吸方法</h2><p>%s</p><h2>常见问题</h2><p>%s</p><h2>解决办法</h2><p>%s</p>" % (
-            subject_name, subject_target, dongzuoyaoling, xunlianyaoqiu, changdiqicai, huxifangfa, changjianwenti,
-            jiejuebanfa)
+            intro_string = intro_string + "<h2>解决办法</h2><p>%s</p>" % (jiejuebanfa)
+        print(intro_string)
+        print("======================")
         # 图片地址json
         # 首先判断该科目是否有图片
         img_dict = {}
