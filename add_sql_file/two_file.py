@@ -107,35 +107,35 @@ def do_all_list(one_list):
         intro_string = ""
         if subject_name:
             subject_name = subject_name.strip()
-            intro_string = intro_string + "<h2>科目名称</h2><p>%s</p>" % (subject_name)
+            intro_string = intro_string + "<h3>科目名称</h3><p>%s</p>" % (subject_name)
         subject_target = one.get("column10")
         if subject_target:
             subject_target = subject_target.strip()
-            intro_string = intro_string + "<h2>科目目标</h2><p>%s</p>" % (subject_target)
+            intro_string = intro_string + "<h3>科目目标</h3><p>%s</p>" % (subject_target)
         dongzuoyaoling = one.get("column11")
         if dongzuoyaoling:
             dongzuoyaoling = dongzuoyaoling.strip()
-            intro_string = intro_string + "<h2>动作要领</h2><p>%s</p>" % (dongzuoyaoling)
+            intro_string = intro_string + "<h3>动作要领</h3><p>%s</p>" % (dongzuoyaoling)
         xunlianyaoqiu = one.get("column12")
         if xunlianyaoqiu:
             xunlianyaoqiu = xunlianyaoqiu.strip()
-            intro_string = intro_string + "<h2>训练要求</h2><p>%s</p>" % (xunlianyaoqiu)
+            intro_string = intro_string + "<h3>训练要求</h3><p>%s</p>" % (xunlianyaoqiu)
         changdiqicai = one.get("column13")
         if changdiqicai:
             changdiqicai = changdiqicai.strip()
-            intro_string = intro_string + "<h2>场地器材</h2><p>%s</p>" % (changdiqicai)
+            intro_string = intro_string + "<h3>场地器材</h3><p>%s</p>" % (changdiqicai)
         huxifangfa = one.get("column14")
         if huxifangfa:
             huxifangfa = huxifangfa.strip()
-            intro_string = intro_string + "<h2>呼吸方法</h2><p>%s</p>" % (huxifangfa)
+            intro_string = intro_string + "<h3>呼吸方法</h3><p>%s</p>" % (huxifangfa)
         changjianwenti = one.get("column15")
         if changjianwenti:
             changjianwenti = changjianwenti.strip()
-            intro_string = intro_string + "<h2>常见问题</h2><p>%s</p>" % (changjianwenti)
+            intro_string = intro_string + "<h3>常见问题</h3><p>%s</p>" % (changjianwenti)
         jiejuebanfa = one.get("column16")
         if jiejuebanfa:
             jiejuebanfa = jiejuebanfa.strip()
-            intro_string = intro_string + "<h2>解决办法</h2><p>%s</p>" % (jiejuebanfa)
+            intro_string = intro_string + "<h3>解决办法</h3><p>%s</p>" % (jiejuebanfa)
         print(intro_string)
         print("======================")
         # 图片地址json
